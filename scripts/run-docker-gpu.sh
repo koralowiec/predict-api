@@ -23,4 +23,4 @@ target=/src/results \
 --mount type=bind,\
 source=$current_path/../upload,\
 target=/src/upload \
-tf-gpu-flask:base
+predict-api:gpu

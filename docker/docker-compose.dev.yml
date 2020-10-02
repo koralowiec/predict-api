@@ -1,6 +1,6 @@
 version: '2.4'
 services:
-    server:
+    predict-api:
         build:
             context: ../
             dockerfile: ./docker/gpu.Dockerfile
@@ -8,10 +8,8 @@ services:
         # https://github.com/NVIDIA/nvidia-docker/wiki#do-you-support-docker-compose
         runtime: nvidia
         ports: 
-            - "5000:5000"
+            - "5002:5000"
         volumes:
-            - ../results:/src/results
-            - ../upload:/src/upload
             - /tmp/openimages_v4__ssd__mobilenet_v2:/model_ssd
             - /tmp/faster_rcnn_openimages_v4_inception_resnet_v2:/model_faster_rcnn
             - ../code:/src/code
@@ -20,10 +18,3 @@ services:
             - PYTHONUNBUFFERED=1
             - DEBUG=true
             - MODULE
-            # - OCR_SERVER=192.168.0.5:5002
-    ocr:
-        image: ghcr.io/koralowiec/ocr-server:latest
-        ports: 
-            - "5001:5000"
-        environment:
-            - PYTHONUNBUFFERED=1

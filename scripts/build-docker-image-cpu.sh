@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker build -t tf-cpu-flask -f ../docker/cpu.Dockerfile ../
+docker build -t predict-api -f ../docker/cpu.Dockerfile ../
