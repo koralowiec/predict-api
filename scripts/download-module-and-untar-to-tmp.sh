@@ -15,8 +15,8 @@ function download_and_untar {
     echo $module_name $module_download_url
 
     wget $module_download_url -O /tmp/$module_name.tar.gz
-    mkdir /tmp/$module_name/
-    tar -xf /tmp/$module_name.tar.gz -C /tmp/$module_name/
+    mkdir -p ../modules/$module_name/
+    tar -xf /tmp/$module_name.tar.gz -C ../modules/$module_name/
 }
 
 if [ "$module_number" -eq 0 ] || [ "$module_number" -eq 1 ]; then

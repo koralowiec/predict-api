@@ -1,11 +1,11 @@
 #!/bin/bash 
 
-current_path=$(pwd) 
+current_path=$(pwd)
 module_name_ssd=openimages_v4__ssd__mobilenet_v2
-model_path_ssd=/tmp/$module_name_ssd/
+model_path_ssd=../modules/$module_name_ssd/
 
 module_name_faster_rcnn=openimages_v4__ssd__mobilenet_v2
-model_path_faster_rcnn=/tmp/$module_name_faster_rcnn/
+model_path_faster_rcnn=../modules/$module_name_faster_rcnn/
 
 docker run --gpus all \
 --rm --init -it \
