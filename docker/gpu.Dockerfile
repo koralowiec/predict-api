@@ -1,5 +1,7 @@
 FROM tensorflow/tensorflow:2.2.0-gpu as base
 
+LABEL org.opencontainers.image.source https://github.com/koralowiec/predict-api
+
 WORKDIR /src
 
 COPY requirements.txt ./

@@ -1,0 +1,37 @@
+name: Publish Docker images to GitHub Container Registry
+on: 
+  push:
+      branches:
+        - main
+jobs:
+  push_cpu_image_to_ghcr:
+    name: Push CPU image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+      - name: Push to GitHub Container Registry
+        uses: docker/build-push-action@v1
+        with:
+          dockerfile: docker/cpu.Dockerfile
+          username: ${{ github.actor }}
+          password: ${{ secrets.CR_PAT }}
+          registry: ghcr.io
+          repository: koralowiec/predict-api
+          tags: cpu
+  push_gpu_image_to_ghcr:
+    name: Push GPU image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+      - name: Push to GitHub Container Registry
+        uses: docker/build-push-action@v1
+        with:
+          dockerfile: docker/gpu.Dockerfile
+          target: base
+          username: ${{ github.actor }}
+          password: ${{ secrets.CR_PAT }}
+          registry: ghcr.io
+          repository: koralowiec/predict-api
+          tags: gpu
