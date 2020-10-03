@@ -1,17 +1,11 @@
-from fastapi import FastAPI
-from pydantic import BaseModel, Field
-
+from fastapi import FastAPI, Depends
 import tensorflow as tf
 import tensorflow_hub as hub
-
-import numpy as np
-import base64
-
-# For measuring the inference time.
-import time
-
 import os
 import logging as log
+import time
+
+from object_detector_from_base64 import ObjectDetectorFromBase64
 
 debug = os.environ.get("DEBUG")
 log.basicConfig(
@@ -39,33 +33,12 @@ module_path = (
 log.info("Loading module_env from: %s", module_path)
 
 start_time = time.time()
-detector = hub.load(module_path).signatures["default"]
+tf_hub_module = hub.load(module_path).signatures["default"]
 end_time = time.time()
 
 log.info("Loading module time: %.2f", end_time - start_time)
 
-
-def run_detector(detector, img) -> dict:
-    converted_img = tf.image.convert_image_dtype(img, tf.float32)[
-        tf.newaxis, ...
-    ]
-    start_time = time.time()
-    result = detector(converted_img)
-    end_time = time.time()
-
-    log.debug(result)
-
-    result = {key: value.numpy().tolist() for key, value in result.items()}
-
-    log.info("Found %d objects.", len(result["detection_scores"]))
-    log.info("Inference time: %.2f", end_time - start_time)
-    log.debug(result)
-
-    return result
-
-
-class Base64Body(BaseModel):
-    imgBase64: str = Field(..., title="Image encoded in Base64")
+object_detector = ObjectDetectorFromBase64(tf_hub_module)
 
 
 @app.get("/healthcheck")
@@ -74,8 +47,5 @@ def healthcheck():
 
 
 @app.post("/predict")
-def raw_image(body: Base64Body):
-    image_decoded_from_base64 = base64.b64decode(body.imgBase64)
-    image = tf.image.decode_jpeg(image_decoded_from_base64, channels=3)
-
-    return run_detector(detector, image)
+def raw_image(results: dict = Depends(object_detector)):
+    return results
