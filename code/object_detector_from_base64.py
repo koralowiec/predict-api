@@ -6,7 +6,11 @@ import time
 
 
 class Base64Body(BaseModel):
-    imgBase64: str = Field(..., title="Image encoded in Base64")
+    imgBase64: str = Field(
+        ...,
+        title="Image encoded in Base64",
+        example="/9j/4Az7oQTg/IjIrVkcV ... ZhleJ/hPXg1ag70wwB4rq6pKHwaNa3KGRt6knopwK6urqkD/2Q==",
+    )
 
 
 class ObjectDetectorFromBase64:

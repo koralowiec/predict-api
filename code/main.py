@@ -47,5 +47,5 @@ def healthcheck():
 
 
 @app.post("/predict")
-def raw_image(results: dict = Depends(object_detector)):
+def detect_objects_base64(results: dict = Depends(object_detector)):
     return results

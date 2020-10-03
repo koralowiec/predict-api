@@ -1,6 +1,4 @@
-# Flask with TensorFlow Hub module
-
-Simple Flask server with endpoint for uploading a photo (from url). The photo is then loaded to module (to detect object) and saved with bounding boxes in directory results.
+# Serving Object Detection model from TensorFlow Hub with FastAPI
 
 Tested on: 
  - Docker version: 19.03.12-ce
@@ -9,13 +7,13 @@ Tested on:
 ## Clone
 
 ```bash
-git clone https://github.com/Ar3q/flask-with-tf-hub-module.git
-cd flask-with-tf-hub-module
+git clone https://github.com/koralowiec/predict-api
+cd predict-api
 ```
 
 ## Downloading the TensorFlow Hub's model
 
-The model can be downloaded and untared (to /tmp) with simple script:
+The model can be downloaded (to /tmp) and untared (to ./modules) with simple script:
 
 ```bash
 cd ./scripts
@@ -31,7 +29,7 @@ bash: ./download-module-and-untar-to-tmp.sh: Permission denied
 You need add execution right:
 
 ```bash
-chmod +x ./download-module-and-untar-to-tmp.sh
+chmod u+x ./download-module-and-untar-to-tmp.sh
 ```
 
 And try running once again
@@ -91,24 +89,14 @@ docker-compose -f ./docker/docker-compose.dev.yml up
 	```
 2. Install dependencies:
    	```bash
-    pip install tensorflow==2.0.1
+    pip install tensorflow==2.2.0
     pip install -r requirements.txt
 	```
-3. Manually change line 150 in index.py file with correct path to model (if you used script from the first step it should be: /tmp/openimages_v4__ssd__mobilenet_v2):
+3. Manually change line 36 in main.py file with correct path to model (if you used script from the first step it should be: ./modules/openimages_v4__ssd__mobilenet_v2):
    	```python
-    detector = hub.load("/tmp/openimages_v4__ssd__mobilenet_v2").signatures['default'] 
+	tf_hub_module = hub.load(module_path).signatures["default"]
 	```
-4. Run a flask server:
+4. Run a server:
 	```bash
-	FLASK_APP="index.py" flask run --host=0.0.0.0
+	uvicorn --app-dir code main:app --port 5000 --host 0.0.0.0
 	```
-
-### Send request (I'm using [Insomnia](https://insomnia.rest/), but Postman or curl should also do their job ;))
-
-1. Set Content-Type header to application/json:
-       ![content type](/screens/content-type1.png)
-2. Add to JSON key url with string value of url with photo:
-       ![JSON body](/screens/json-body1.png)
-3. Send request (to http://localhost:5000/upload)
-4. If everything run correctly (processing will take some time, especially for a few first requests), you will find the photo with drawn bounding boxes in results directory:
-       ![result](/screens/result-1.png)
