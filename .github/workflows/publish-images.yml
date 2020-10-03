@@ -1,0 +1,22 @@
+name: Publish Docker image
+on: 
+  push:
+      branches:
+        - main
+        - ghcr-workflow-1
+jobs:
+  push_cpu_image_to_ghcr:
+    name: Push CPU image to GHCR
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+      - name: Push to GitHub Container Registry
+        uses: docker/build-push-action@v1
+        with:
+          dockerfile: docker/cpu.Dockerfile
+          username: ${{ github.actor }}
+          password: ${{ secrets.CR_PAT }}
+          registry: ghcr.io
+          repository: koralowiec/predict-api
+          tags: cpu
