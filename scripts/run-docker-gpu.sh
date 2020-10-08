@@ -4,7 +4,7 @@ current_path=$(pwd)
 module_name_ssd=openimages_v4__ssd__mobilenet_v2
 model_path_ssd=../modules/$module_name_ssd/
 
-module_name_faster_rcnn=openimages_v4__ssd__mobilenet_v2
+module_name_faster_rcnn=faster_rcnn_openimages_v4_inception_resnet_v2
 model_path_faster_rcnn=../modules/$module_name_faster_rcnn/
 
 docker run --gpus all \
@@ -18,9 +18,4 @@ target=/model_ssd \
 source=$model_path_faster_rcnn,\
 target=/model_faster_rcnn \
 --mount type=bind,\
-source=$current_path/../results,\
-target=/src/results \
---mount type=bind,\
-source=$current_path/../upload,\
-target=/src/upload \
-predict-api:gpu
+ghcr.io/koralowiec/predict-api:gpu

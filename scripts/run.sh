@@ -16,7 +16,7 @@ while getopts 'bdg' flag; do
 done
 
 if [ "$d_flag" = true ] ; then
-	./download-module-and-untar-to-tmp.sh
+	./download-module-and-untar.sh
 fi
 
 if [ "$b_flag" = true ] ; then

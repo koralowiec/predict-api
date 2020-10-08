@@ -3,8 +3,10 @@ services:
     predict-api:
         build:
             context: ../
-            dockerfile: ./docker/cpu.Dockerfile
+            dockerfile: ./docker/gpu.Dockerfile
             target: dev
+        # https://github.com/NVIDIA/nvidia-docker/wiki#do-you-support-docker-compose
+        runtime: nvidia
         ports: 
             - "5002:5000"
         volumes:
