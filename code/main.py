@@ -18,17 +18,13 @@ app = FastAPI()
 log.info("TensorFlow version: %s", tf.__version__)
 
 # Check available GPU devices.
-log.info(
-    "The following GPU devices are available: %s" % tf.test.gpu_device_name()
-)
+log.info("The following GPU devices are available: %s" % tf.test.gpu_device_name())
 
 
 # Object detection module
 module_env = os.environ.get("MODULE")
 log.info("MODULE env: %s", module_env)
-module_path = (
-    "/model_faster_rcnn" if module_env == "FASTER_RCNN" else "/model_ssd"
-)
+module_path = "/model_faster_rcnn" if module_env == "FASTER_RCNN" else "/model_ssd"
 
 log.info("Loading module_env from: %s", module_path)
 

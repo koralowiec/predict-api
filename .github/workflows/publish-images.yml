@@ -14,6 +14,7 @@ jobs:
         uses: docker/build-push-action@v1
         with:
           dockerfile: docker/cpu.Dockerfile
+          target: base
           username: ${{ github.actor }}
           password: ${{ secrets.CR_PAT }}
           registry: ghcr.io
